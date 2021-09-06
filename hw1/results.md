@@ -38,7 +38,7 @@
 
 ## (a)
 
-
+![Image of ITG](ITG.png)
 
 ## (b)
 
@@ -62,7 +62,9 @@
 
 ## (c)
 
-    
+- Loop-carried Dependence Grap
+
+![Image of LDG](LDG.png)
 
 # 3.Function In-lining and Performance
 
@@ -257,7 +259,104 @@ int add  (int a, int b) {
 
 # 4.Loop transformations I
 
+## Original Code
 
+```
+int a[N][4];
+int rand_number = rand();
+for (i=0; i<4; i++) {
+    threshold = 2.0 * rand_number;
+    for (j=0; j<N; j++) {
+        if (threshold < 4) {
+            sum = sum + a[j][i];
+        } else {      
+            sum = sum + a[j][i] + 1;
+        }     
+    }
+}
+```
+
+## Loop Invariant Hoisting
+
+```
+int a[N][4];
+int rand_number = rand();
+threshold = 2.0 * rand_number;
+for (i=0; i<4; i++) {   
+    for (j=0; j<N; j++) {
+        if (threshold < 4) {
+            sum = sum + a[j][i];
+        } else {      
+            sum = sum + a[j][i] + 1;
+        }     
+    }
+}
+```
+
+## Loop unswitching
+
+```
+int a[N][4];
+int rand_number = rand();
+threshold = 2.0 * rand_number;
+if (threshold < 4) {
+    for (i=0; i<4; i++) {   
+        for (j=0; j<N; j++) { 
+            sum = sum + a[j][i];
+        }
+    }
+} else {
+    for (i=0; i<4; i++) {   
+        for (j=0; j<N; j++) { 
+            sum = sum + a[j][i] + 1;
+        }
+    }
+}
+```
+
+## Loop Interchange
+
+```
+int a[N][4];
+int rand_number = rand();
+threshold = 2.0 * rand_number;
+if (threshold < 4) {
+    for (j=0; j<N; j++) {   
+        for (i=0; i<4; i++) { 
+            sum = sum + a[j][i];
+        }
+    }
+} else {
+    for (j=0; j<N; j++) {   
+        for (i=0; i<4; i++) { 
+            sum = sum + a[j][i] + 1;
+        }
+    }
+}
+```
+
+## Loop Unrolling
+
+```
+int a[N][4];
+int rand_number = rand();
+threshold = 2.0 * rand_number;
+if (threshold < 4) {
+    for (j=0; j<N; j++) {   
+        sum = sum + a[j][0];
+        sum = sum + a[j][1];
+        sum = sum + a[j][2];
+        sum = sum + a[j][3];
+    }
+} else {
+    for (j=0; j<N; j++) {   
+        sum = sum + a[j][0];
+        sum = sum + a[j][1];
+        sum = sum + a[j][2];
+        sum = sum + a[j][3];
+    }
+}
+```
 
 # 5.Loop transformations II
 
