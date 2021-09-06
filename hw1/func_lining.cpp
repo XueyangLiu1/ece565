@@ -14,8 +14,9 @@ double calc_time(struct timeval start, struct timeval end) {
     return end_sec - start_sec;
   }
 };
+int add (int a, int b) __attribute__ ((__always_inline__));
 
-int add(int a, int b) {
+int add  (int a, int b) {
   return (a+b);
 }
 
