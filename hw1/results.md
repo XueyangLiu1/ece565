@@ -26,7 +26,43 @@
 
 - I was running the code on a VM provided by duke vcm and the processor arch is x86_64, cpu freq is 2.70GHz, OS is Ubuntu18.
 
+## (c)
+
+
+
+## (d)
+
+
+
 # 2.Dependence Analysis
+
+## (a)
+
+
+
+## (b)
+
+- Loop independent dependencies:
+
+    S1[i,j] -> T S3[i,j]
+
+    S1[i,j] -> A S2[i,j]
+
+- Loop-carried dependencies:
+
+    S1[i,j] -> T S2[i+1,j+1]
+
+    S1[i,j] -> A S1[i+1,j-1]
+
+    S3[i-1,j] -> T S1[i,j]
+
+    S4[i-1,j+1] -> T S4[i,j]
+
+    S3[i-2,j] -> T S2[i,j]
+
+## (c)
+
+    
 
 # 3.Function In-lining and Performance
 
@@ -34,9 +70,25 @@
 
 ### *(i)* with attribute noinline
 
+```
+int add (int a, int b) __attribute__ ((__noinline__));
+
+int add  (int a, int b) {
+  return (a+b);
+}
+```
+
 - run 10 times, the shortest time is 254.035 milliseconds
 
 ### *(ii)* with attribute always_inline
+
+```
+int add (int a, int b) __attribute__ ((__always_inline__));
+
+int add  (int a, int b) {
+  return (a+b);
+}
+```
 
 - run 10 times, the shortest time is 104.934 milliseconds
 
@@ -205,4 +257,18 @@
 
 # 4.Loop transformations I
 
+
+
 # 5.Loop transformations II
+
+## (a)
+
+- Not safe. Originally, there is a loop-carried output dependency from S1[i] to S3[i-1] and a loop-carried anti dependency from S2[i] to S3[i-1], while after the transformation, there is a loop-carried output dependency from S3[i] to S1[i+1] and a loop-carried true dependency from S3[i] to S2[i+1].
+
+## (b)
+
+- Not safe. Originally, the outermost loop carries a loop-carried anti dependency from S1[i][j] to S1[i+1][j-1]. Here i < i' and j > j', so it's not safe.
+
+## (c)
+
+- Safe.
