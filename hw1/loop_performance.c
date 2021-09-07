@@ -16,20 +16,32 @@ double calc_time(struct timeval start, struct timeval end) {
 };
 
 
+// void do_loops(int *a, int *b, int *c, int N)
+// {
+//   int i;
+//   for (i=N-1; i>=1; i--) {
+//     a[i] = a[i] + 1;
+//   }
+//   for (i=1; i<N; i++) {
+//     b[i] = a[i+1] + 3;
+//   }
+//   for (i=1; i<N; i++) {
+//     c[i] = b[i-1] + 2;
+//   }
+// }
+
 void do_loops(int *a, int *b, int *c, int N)
 {
   int i;
-  for (i=N-1; i>=1; i--) {
+  b[N-1] = a[N] + 3;
+  for (i=N-1; i>=2; i--) {
     a[i] = a[i] + 1;
-  }
-  for (i=1; i<N; i++) {
-    b[i] = a[i+1] + 3;
-  }
-  for (i=1; i<N; i++) {
+    b[i-1] = a[i] + 3;
     c[i] = b[i-1] + 2;
   }
+  c[1] = b[0] + 2;
+  a[1] = a[1] + 1;
 }
-
 
 int main(int argc, char *argv[])
 {
