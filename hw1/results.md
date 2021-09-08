@@ -28,11 +28,58 @@
 
 ## (c)
 
+- Original
 
+```
+void do_loops(int *a, int *b, int *c, int N)
+{
+  int i;
+  for (i=N-1; i>=1; i--) {
+    a[i] = a[i] + 1;
+  }
+  for (i=1; i<N; i++) {
+    b[i] = a[i+1] + 3;
+  }
+  for (i=1; i<N; i++) {
+    c[i] = b[i-1] + 2;
+  }
+}
+```
+
+- Loop Fusion
+
+By doing so, the optimized -O3 version is slower than original -O3, and the optimized -O2 version is about the same with the original -O2. Therefore, I think the parallellism is kind of hampered in the optimized version.
+
+- Loop unrolling
+
+By doing so, the number of loops is fewer by seeing the assembly code.
+
+- Loop reversal
+
+I reversed the loop order of the loops containing b and c. This did not work well. The -O2 version was about the same while the -O3 version is even slower. 
+
+- Final code (Combined method)
+
+```
+void do_loops(int *a, int *b, int *c, int N)
+{
+  int i;
+  b[N-1] = a[N] + 3;
+  for (i=N-1; i>=2; i--) {
+    a[i] = a[i] + 1;
+    b[i-1] = a[i] + 3;
+    c[i] = b[i-1] + 2;
+  }
+  c[1] = b[0] + 2;
+  a[1] = a[1] + 1;
+}
+```
+
+I expected this to work well but it didn't. This could beat the -O2 compiler but not the -O3.
 
 ## (d)
 
-
+Generally, I've tried a lot of methods and their combinations, but I cannot beat -O3 compiler. The -O2 compiler is easier to beat. Later I found that this may have something to do with the OS version and gcc version. I'm using Ubuntu18 with gcc 7.5.0, but the same code compiled on a VM with Ubuntu20.04 and gcc 9.1.3 beats the -O3 compiler successfully.
 
 # 2.Dependence Analysis
 
