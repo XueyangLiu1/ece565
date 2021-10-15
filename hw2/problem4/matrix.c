@@ -89,7 +89,7 @@ void calculate_result(int loop_type){
       }
     }
   }else{
-    printf("loop type can only be 1,2,3");
+    printf("loop type can only be 1,2,3,4");
   }
 }
 
